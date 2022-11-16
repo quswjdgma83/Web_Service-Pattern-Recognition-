@@ -104,7 +104,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="main">main</a>
+                        <a class="nav-link" href="service">main</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="home">home</a>
@@ -126,7 +126,7 @@
                 <h1 class="contact_text">재료</h1>
                 <div class="mail_sectin">
                     <h3 class="dummy_text">이미지 파일을 첨부해 주세요.(이미지 파일 이외에는 첨부하시면 안됩니다.) 그리고 1이상 3이하로 사진 하나에 재료 하나가 담아주세요</h3>
-                    <form id="frm" class="form-horizontal" action="mainAction" th:object="${board}" method="post" enctype="multipart/form-data" onsubmit="return registerBoard(this)">
+                    <form id="frm" class="form-horizontal" action="serviceAction" method="post" enctype="multipart/form-data">
                         <div data-name="fileDiv" class="form-group filebox bs3-primary">
                             <div class="col-sm-10">
                                 <label for="file_0" class="control-label">찾아보기</label>
@@ -135,12 +135,9 @@
                                 <button type="button" onclick="addFile()" class="btn btn-bordered btn-xs visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
                                 </button>
-                                <button type="button" onclick="removeFile(this)" class="btn btn-bordered btn-xs visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
-                                    <i class="fa fa-minus" aria-hidden="true"></i>
-                                </button>
                             </div>
-                            <div id="btnDiv" class="send_bt" onclick="return chk_form()"><a>Start</a></div>
                         </div>
+                        <div id="btnDiv" class="send_bt" onclick="return chk_form()"><a>Start</a></div>
                     </form>
                 </div>
             </div>
