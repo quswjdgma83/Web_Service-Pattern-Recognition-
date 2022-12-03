@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width", initial-scale="1" >  <!-- 반응형 웹에 사용하는 메타태그 -->
-    <link rel="stylesheet" href="css1/bootstrap.css"> <!-- 참조  -->
     <title>login4</title>
+    <!-- for-mobile-apps -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Flat Ui Web Form Widget Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+    function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //for-mobile-apps -->
+    <link href="css2/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href='//fonts.googleapis.com/css?family=Ubuntu:400,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
 </head>
-<body>
-<script>
-    function stoplogin() {
-        alert("이미 로그인 창입니다!");
-    }
-</script>
 <script th:inline="javascript">
     var check = [[${message}]];
     if(check > 0) {
@@ -21,52 +22,22 @@
         alert("회원가입에 성공했습니다!");
     }
 </script>
-<nav class ="navbar navbar-default">
-    <div class="navbar-header"> <!-- 홈페이지의 로고 -->
-        <button type="button" class="navbar-toggle collapsed"
-                data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-                aria-expand="false">
-            <span class ="icon-bar"></span> <!-- 줄였을때 옆에 짝대기 -->
-            <span class ="icon-bar"></span>
-            <span class ="icon-bar"></span>
-        </button>
-        <a class ="navbar-brand" onclick="stoplogin()" href="login">레시피 추천 서비스</a>
-    </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="#" class = "dropdown-toggle"
-                   data-toggle="dropdown" role ="button"
-                   aria-haspopup="true"
-                   aria-expanded="false">메뉴<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li class="active"><a onclick="stoplogin()" href="login">로그인</a></li>
-                    <li><a href="join">회원가입</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
-    <div class="container">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4">
-            <div class ="jumbotron" style="padding-top:20px;">
-                <form method = "post" action="loginAction">
-                    <h3 style="text-align:center;">로그인 화면</h3>
-                    <div class ="form-group">
-                        <input type ="text" class="form-control" placeholder="아이디" name ="userID" maxlength='20'>
-                    </div>
-                    <div class ="form-group">
-                        <input type ="password" class="form-control" placeholder="비밀번호" name ="userPassword" maxlength='20'>
-                    </div>
-                    <input type="submit" class="btn btn-primary form-control" value="로그인">
+<body>
+<div class="main">
+    <h1>All about Recipe</h1>
+    <div class="w3l_main_grids">
+        <div class="w3l_main_grid1_w3ls w3l_main_grid1_w3ls_x">
+            <h3>Login</h3>
+            <div class="w3l_main_grid1_w3ls_grid">
+                <form action="loginAction" method="post">
+                    <input type="text" name="userID" placeholder="User Name" required=" " maxlength='20'>
+                    <input type="password" name="userPassword" placeholder="Password" required=" " maxlength='20'>
+                    <input type="submit" value="Sign In">
                 </form>
+                <h5>Don't have an account? <a href="join">Sign Up</a></h5>
             </div>
         </div>
-        <div class="col-lg-4"></div>
     </div>
-
-<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
-<script src="js/bootstrap.js"></script>
+</div>
 </body>
 </html>

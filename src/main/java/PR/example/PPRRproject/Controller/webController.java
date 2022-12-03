@@ -2,14 +2,22 @@ package PR.example.PPRRproject.Controller;
 
 import PR.example.PPRRproject.Model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.*;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +36,7 @@ public class webController {
     private ClientRepository infoCRepo;
 
     int check = 0;
-    String Arg1;
-    String Arg2;
-    String Arg3;
+    String[] Arg = new String[3];
 
     @GetMapping("home")
     public String Get_home() {
@@ -64,52 +70,40 @@ public class webController {
     }
 
     @PostMapping("serviceAction")
-    public String Post_main(MultipartHttpServletRequest files) throws Exception {
-        String uploadFolder = "C:\\test\\upload";
+    public String Post_main(MultipartHttpServletRequest files, Model model) throws Exception {
         List<MultipartFile> list = files.getFiles("files");
         if (list.size() < 1) {
             return "service";
         } else{
             try {
-                URL url = new URL("http:9900//17.135.65.255/api");
-                ObjectMapper mapper = new ObjectMapper();
-                StringBuilder sb = new StringBuilder();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+                JsonNode response;
+                MultiValueMap<String, Object> body
+                        = new LinkedMultiValueMap<>();
 
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-                //Request Header 정의
-                con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-                BufferedReader br;
-                List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-                //전송방식
-                con.setRequestMethod("POST");
-                //서버에 연결되는 Timeout 시간 설정
-                con.setConnectTimeout(5000);
-                //InputStream 읽어 오는 Timeout 시간 설정
-                con.setReadTimeout(5000);
-                con.setDoOutput(false);
-                if(con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line).append("\n");
-                    }
-                    br.close();
-
-                    mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>(){});
-                    //model.addAttribute("listMap", listMap);
-                    if (list.size() > 2) {
-
-                    } else if (list.size() > 1) {
-
-                    } else {
-
+                for (MultipartFile file : list) {
+                    if (!file.isEmpty()) {
+                        body.add("files", file.getResource());
                     }
                 }
-                else {
-                    System.out.println("error: 서버와 통신 실패");
-                    return "service";
+
+                HttpEntity<MultiValueMap<String, Object>> requestEntity
+                        = new HttpEntity<>(body, headers);
+
+                String serverUrl = "http://127.0.0.1:9900/api";
+
+                RestTemplate restTemplate = new RestTemplate();
+                response = restTemplate.postForObject(serverUrl, requestEntity, JsonNode.class);
+
+                int size = response.get("size").asInt();
+                int i = 0;
+                check = 0;
+                for(i = 0; i < size; i++){
+                    Arg[i] = response.get("image" + i).asText();
                 }
+                check = i;
+
             }catch (Exception e){
                 System.err.println(e.toString());
                 return "service";
@@ -240,13 +234,13 @@ public class webController {
             };
         }
         else if(check < 2){
-            buf = infoRepository.findByRCPPARTSDTLSContaining("황태");
+            buf = infoRepository.findByRCPPARTSDTLSContaining(Arg[0].trim());
         }
         else if(check < 3){
-            buf = infoRepository.findUserByApAndBpNamedParams("황태", "무");
+            buf = infoRepository.findUserByApAndBpNamedParams(Arg[0].trim(), Arg[1].trim());
         }
         else{
-            buf = infoRepository.findUserByApAndBpAndCpNamedParams("황태", "무", "두부");
+            buf = infoRepository.findUserByApAndBpAndCpNamedParams(Arg[0].trim(), Arg[1].trim(), Arg[2].trim());
         }
         if(buf.size() < 1){
 
@@ -274,6 +268,7 @@ public class webController {
             model.addAttribute("source5", buf.get(index).getMANUALIMG05());
             model.addAttribute("source6", buf.get(index).getMANUALIMG06());
         }
+
         return "show";
     }
 
@@ -304,5 +299,8 @@ public class webController {
     public String Get_ctb() {
         return "contributor";
     }
+
+    @GetMapping("elastic")
+    public String Get_elastic(){ return "elastic";}
 
 }
